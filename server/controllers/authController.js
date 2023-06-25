@@ -6,7 +6,7 @@ import JWT from "jsonwebtoken";
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
       return res.status(400).send({
@@ -40,11 +40,11 @@ export const registerController = async (req, res) => {
   }
 };
 
-//LOGIN Controller ---- POST  ---- http://localhost:8080/api/v1/auth/login
+//LOGIN Controller ---- POST  --- http://localhost:8080/api/v1/auth/login
 export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
+    // console.log(email, password);
     const user = await userModel.findOne({ email });
     if (!user) {
       return res.status(400).send({
@@ -84,4 +84,10 @@ export const loginController = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+//Test Controller ---- GET  --- http://localhost:8080/api/v1/auth/test
+export const testConteller = (req, res) => {
+  console.log("Test controller");
+  res.send("Test controller");
 };
