@@ -50,6 +50,7 @@ body {
   outline: none;
   background-color: white; /* White color */
   border-radius: 0px;
+  padding-right: 470px;
   width: 600px;
   margin-left: 80px;
 }
@@ -60,10 +61,13 @@ body {
 
 .search-bar button[type="submit"] {
   padding: 6px 10px;
-  background-color: #fff; /* White color */
+  background-color: #f9a825; /* White color */
   color: #2874f0; /* Blue color */
   border: none;
+  border-radius: 0px;
   cursor: pointer;
+  margin-right: 60px;
+  margin-left: -2px;
 }
 
 .nav-list {
