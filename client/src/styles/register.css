@@ -38,7 +38,7 @@ input[type="password"] {
 }
 
 button[type="submit"] {
-  width: 100%;
+  /* width: 100%; */
   padding: 8px;
   font-size: 14px;
   color: #fff;

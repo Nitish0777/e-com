@@ -15,7 +15,7 @@ body {
   top: 0;
   z-index: 100;
   background-color: #f9f9f9;
-  padding: 0px; /* Decreased height */
+  padding: 0px 0px; /* Decreased height */
 }
 
 .navbar {
@@ -50,7 +50,6 @@ body {
   outline: none;
   background-color: white; /* White color */
   border-radius: 0px;
-  padding-right: 470px;
   width: 600px;
   margin-left: 80px;
 }
@@ -61,13 +60,10 @@ body {
 
 .search-bar button[type="submit"] {
   padding: 6px 10px;
-  background-color: #f9a825; /* White color */
+  background-color: #fff; /* White color */
   color: #2874f0; /* Blue color */
   border: none;
-  border-radius: 0px;
   cursor: pointer;
-  margin-right: 60px;
-  margin-left: -2px;
 }
 
 .nav-list {
