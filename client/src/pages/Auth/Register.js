@@ -41,7 +41,7 @@ const Register = () => {
   return (
     <Layout>
       <div className="container">
-        <h1>Register</h1>
+        <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>
@@ -92,7 +92,7 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="address">Password</label>
+            <label htmlFor="address">Address</label>
             <input
               type="text"
               id="address"
