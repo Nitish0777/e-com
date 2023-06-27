@@ -4,9 +4,19 @@ import { FaShoppingCart, FaSearch } from "react-icons/fa";
 import logo from "../../assets/img/logo.png";
 import "../../styles/header.css";
 import { useAuth } from "../../context/auth";
+import { toast } from "react-hot-toast";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
+  const handleLogout = () => {
+    setAuth({
+      ...auth,
+      user: null,
+      token: "",
+    });
+    localStorage.removeItem("auth");
+    toast.success("Logout successfull");
+  };
   return (
     <header className="header">
       <nav className="navbar">
@@ -39,7 +49,8 @@ const Header = () => {
             <>
               <li className="nav-item">
                 <NavLink
-                  to="/"
+                  onClick={handleLogout}
+                  to="/login"
                   className="button-link nav-item"
                   activeclassname="active"
                 >
