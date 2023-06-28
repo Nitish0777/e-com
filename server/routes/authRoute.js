@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  forgotPasswordController,
   loginController,
   registerController,
   testConteller,
@@ -12,6 +13,13 @@ router.post("/register", registerController);
 
 router.post("/login", loginController);
 
+router.post("/forgot-password", forgotPasswordController);
+
 router.get("/test", requireSignIn, isAdmin, testConteller);
+
+//protected route
+router.get("/user-auth", requireSignIn, (req, res) => {
+  res.status(200).send({ ok: true });
+});
 
 export default router;

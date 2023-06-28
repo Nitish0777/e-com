@@ -86,6 +86,31 @@ export const loginController = async (req, res) => {
   }
 };
 
+//Forgot Password Controller
+export const forgotPasswordController = async (req, res) => {
+  try {
+    const { email, answer, newPassword } = req.body;
+    //check
+    const user = await userModel.findOne({ email, answer });
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "Wrong email or Answer",
+      });
+    }
+    const hashed = await hashPassword(newPassword);
+    await userModel.findByIdAndUpdate(user._id, { password: hashed });
+    return res.send(200).send("Password changed Successfully");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong in Forgot password",
+      error,
+    });
+  }
+};
+
 //Test Controller ---- GET  --- http://localhost:8080/api/v1/auth/test
 export const testConteller = (req, res) => {
   console.log("Test controller");
