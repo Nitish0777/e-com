@@ -33,8 +33,8 @@ const ForgotPassword = () => {
         toast.error("Reset Password error");
       }
     } catch (error) {
-      console.log("Login error", error);
-      toast.error("Login error");
+      console.log("Reset password error", error);
+      toast.error("Reset Password Error");
     }
   };
 
