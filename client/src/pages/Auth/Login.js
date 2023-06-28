@@ -70,8 +70,20 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            onClick={() => {
+              navigate("/forgot-password");
+            }}
+          >
+            Forgot Password
+          </button>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ marginLeft: "100px" }}
+          >
             Login
           </button>
         </form>

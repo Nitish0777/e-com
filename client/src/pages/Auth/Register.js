@@ -11,6 +11,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,6 +26,7 @@ const Register = () => {
           password,
           phone,
           address,
+          answer,
         }
       );
       if (res.data.success) {
@@ -100,6 +102,18 @@ const Register = () => {
               placeholder="Address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="answer">Question</label>
+            <input
+              type="text"
+              id="answer"
+              className="form-control"
+              placeholder="What is your date of birth?"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
             />
           </div>
 
