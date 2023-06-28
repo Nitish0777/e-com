@@ -5,7 +5,7 @@ import JWT from "jsonwebtoken";
 //Register controller POST --- http://localhost:8080/api/v1/auth/register
 export const registerController = async (req, res) => {
   try {
-    const { name, email, password, phone, address } = req.body;
+    const { name, email, password, phone, address, answer } = req.body;
     // console.log(req.body);
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -22,6 +22,7 @@ export const registerController = async (req, res) => {
       phone,
       address,
       password: hashedPassword,
+      answer,
     });
     await user.save();
 
@@ -89,7 +90,26 @@ export const loginController = async (req, res) => {
 //Forgot Password Controller
 export const forgotPasswordController = async (req, res) => {
   try {
-    const { email, answer, newPassword } = req.body;
+    // console.log(req.body);
+    const { email, newPassword, answer } = req.body;
+    if (!email) {
+      return res.status(400).send({
+        success: false,
+        message: "email are required",
+      });
+    }
+    if (!newPassword) {
+      return res.status(400).send({
+        success: false,
+        message: "newPassword are required",
+      });
+    }
+    if (!answer) {
+      return res.status(400).send({
+        success: false,
+        message: "answer are required",
+      });
+    }
     //check
     const user = await userModel.findOne({ email, answer });
     if (!user) {
@@ -100,7 +120,10 @@ export const forgotPasswordController = async (req, res) => {
     }
     const hashed = await hashPassword(newPassword);
     await userModel.findByIdAndUpdate(user._id, { password: hashed });
-    return res.send(200).send("Password changed Successfully");
+    return res.status(200).send({
+      success: true,
+      message: "Password reset successfully",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
