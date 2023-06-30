@@ -79,3 +79,22 @@ export const getAllCategoriesController = async (req, res) => {
     });
   }
 };
+
+//single category
+export const getSingleCategoryController = async (req, res) => {
+  try {
+    const category = await categoryModel.findOne({ slug: req.params.slug });
+    res.status(200).send({
+      success: true,
+      message: "get Single category successfully",
+      category,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in getting single category",
+      error,
+    });
+  }
+};
