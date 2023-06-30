@@ -1,7 +1,11 @@
 import express from "express";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
-import { createProductController } from "../controllers/productController.js";
+import {
+  createProductController,
+  getProductsController,
+} from "../controllers/productController.js";
 import formidable from "express-formidable";
+import { get } from "mongoose";
 
 const router = express.Router();
 
@@ -13,5 +17,8 @@ router.post(
   formidable(),
   createProductController
 );
+
+//get all products
+router.get("/get-products", getProductsController);
 
 export default router;

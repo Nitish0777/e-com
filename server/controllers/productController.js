@@ -41,3 +41,26 @@ export const createProductController = async (req, res) => {
     });
   }
 };
+
+export const getProductsController = async (req, res) => {
+  try {
+    const products = await productModel
+      .find({})
+      .select("-photo")
+      .limit(10)
+      .sort({ createdAt: -1 });
+    res.status(200).send({
+      success: true,
+      totalProducts: products.length,
+      message: "All products get successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in getting all products",
+      error,
+    });
+  }
+};
