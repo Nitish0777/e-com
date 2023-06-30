@@ -1,6 +1,7 @@
 import categoryModel from "../models/categoryModel.js";
 import slugify from "slugify";
 
+//create category
 export const createCategoryController = async (req, res) => {
   try {
     const { name } = req.body;
@@ -35,6 +36,7 @@ export const createCategoryController = async (req, res) => {
   }
 };
 
+//update category
 export const updateCategoryController = async (req, res) => {
   try {
     const { name } = req.body;
@@ -54,6 +56,25 @@ export const updateCategoryController = async (req, res) => {
     res.status(500).send({
       success: false,
       message: "Error in updating category",
+      error,
+    });
+  }
+};
+
+//getAll Categories
+export const getAllCategoriesController = async (req, res) => {
+  try {
+    const categories = await categoryModel.find({});
+    res.status(200).send({
+      success: true,
+      message: "All categories list",
+      categories,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in getting categories",
       error,
     });
   }
