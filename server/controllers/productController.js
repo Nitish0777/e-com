@@ -92,3 +92,28 @@ export const getSingleProductController = async (req, res) => {
     });
   }
 };
+
+export const productPhotoController = async (req, res) => {
+  try {
+    const product = await productModel
+      .findOne({ _id: req.params.pid })
+      .select("photo");
+    if (!product) {
+      return res.status(400).send({
+        success: false,
+        message: "Product photo not found",
+      });
+    }
+    if (product.photo.data) {
+      res.set("Content-Type", product.photo.contentType);
+      return res.status(200).send(product.photo.data);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in getting product photo",
+      error,
+    });
+  }
+};

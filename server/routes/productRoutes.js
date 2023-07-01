@@ -4,6 +4,7 @@ import {
   createProductController,
   getProductsController,
   getSingleProductController,
+  productPhotoController,
 } from "../controllers/productController.js";
 import formidable from "express-formidable";
 import { get } from "mongoose";
