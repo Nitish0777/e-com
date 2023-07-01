@@ -3,6 +3,7 @@ import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import {
   createProductController,
   getProductsController,
+  getSingleProductController,
 } from "../controllers/productController.js";
 import formidable from "express-formidable";
 import { get } from "mongoose";
@@ -20,5 +21,11 @@ router.post(
 
 //get all products
 router.get("/get-products", getProductsController);
+
+//get single product
+router.get("/get-products/:slug", getSingleProductController);
+
+//get photo
+router.get("/products-photo/:pid", productPhotoController);
 
 export default router;
