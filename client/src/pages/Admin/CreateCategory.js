@@ -77,6 +77,26 @@ const CreateCategory = () => {
       toast.error("Error in form for updating category");
     }
   };
+
+  //delete category
+  const handleDelete = async (pId) => {
+    try {
+      const { data } = await axios.delete(
+        `${process.env.REACT_APP_API}/api/v1/category/delete-category/${pId}`
+      );
+      if (data.success) {
+        toast.success("Category deleted successfully ");
+
+        getCategories();
+      } else {
+        toast.error("Category is not delted");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error in form for delteting category");
+    }
+  };
+
   return (
     <Layout title={"Dashboard - Create Category"}>
       <div className="container-fluid m-3 p-3">
@@ -120,6 +140,9 @@ const CreateCategory = () => {
                           <button
                             className="btn btn-danger"
                             style={{ marginLeft: "5px" }}
+                            onClick={() => {
+                              handleDelete(c._id);
+                            }}
                           >
                             Delete
                           </button>
