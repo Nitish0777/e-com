@@ -2,9 +2,11 @@ import express from "express";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import {
   createProductController,
+  deleteProductController,
   getProductsController,
   getSingleProductController,
   productPhotoController,
+  updateProductController,
 } from "../controllers/productController.js";
 import formidable from "express-formidable";
 import { get } from "mongoose";
@@ -20,6 +22,14 @@ router.post(
   createProductController
 );
 
+router.put(
+  "/update-product/:pid",
+  requireSignIn,
+  isAdmin,
+  formidable(),
+  updateProductController
+);
+
 //get all products
 router.get("/get-products", getProductsController);
 
@@ -28,5 +38,8 @@ router.get("/get-products/:slug", getSingleProductController);
 
 //get photo
 router.get("/products-photo/:pid", productPhotoController);
+
+//delete product
+router.delete("/products/:pid", deleteProductController);
 
 export default router;
