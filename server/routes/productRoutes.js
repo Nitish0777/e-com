@@ -40,6 +40,6 @@ router.get("/get-products/:slug", getSingleProductController);
 router.get("/products-photo/:pid", productPhotoController);
 
 //delete product
-router.delete("/products/:pid", deleteProductController);
+router.delete("/delete-products/:pid", deleteProductController);
 
 export default router;

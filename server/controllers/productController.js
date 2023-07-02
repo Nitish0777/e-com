@@ -129,7 +129,7 @@ export const deleteProductController = async (req, res) => {
         message: "Product not found",
       });
     }
-    await product.remove();
+    await product.deleteOne();
     res.status(200).send({
       success: true,
       message: "Product deleted successfully",
