@@ -26,6 +26,10 @@ const HomePage = () => {
     }
   };
 
+  useEffect(() => {
+    getCategories();
+  }, []);
+
   //get all products
   const getAllProducts = async () => {
     try {
@@ -51,12 +55,32 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    getCategories();
-  }, []);
+    if (!checked.length || !radio.length) {
+      getAllProducts();
+    }
+  }, [checked.length, radio.length]);
 
   useEffect(() => {
-    getAllProducts();
-  }, []);
+    if (checked.length || radio.length) {
+      filterProducts();
+    }
+  }, [checked, radio]);
+
+  const filterProducts = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API}/api/v1/product/products-filters`,
+        {
+          checked,
+          radio,
+        }
+      );
+      setProducts(data?.products);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error in getting filtered products");
+    }
+  };
 
   return (
     <Layout
@@ -88,15 +112,13 @@ const HomePage = () => {
             <Radio.Group onChange={(e) => setRadio(e.target.value)}>
               {Prices?.map((p) => (
                 <div key={p._id}>
-                  <Radio
-                    value={p.array}
-                    onChange={(e) => handleFilters(e.target.checked, p._id)}
-                  >
-                    {p.name}
-                  </Radio>
+                  <Radio value={p.array}>{p.name}</Radio>
                 </div>
               ))}
             </Radio.Group>
+          </div>
+          <div className="d-flex flex-column">
+            <button className="btn btn-danger mt-4">Reset Filter</button>
           </div>
         </div>
         <div className="col-md-9">
@@ -112,7 +134,10 @@ const HomePage = () => {
                 />
                 <div className="card-body">
                   <h5 className="card-title">{product.name}</h5>
-                  <p className="card-text">{product.description}</p>
+                  <p className="card-text">
+                    {product.description.substring(0, 30)}
+                  </p>
+                  <p className="card-text">Price: ${product.price}</p>
                   <button className="btn btn-primary ms-1">Add to Cart</button>
                   <button className="btn btn-secondary ms-1">
                     View Product
