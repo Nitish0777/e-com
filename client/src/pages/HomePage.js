@@ -43,8 +43,8 @@ const HomePage = () => {
     }
   };
 
-  //handle filters
-  const handleFilters = (value, id) => {
+  // filter by cat
+  const handleFilter = (value, id) => {
     let all = [...checked];
     if (value) {
       all.push(id);
@@ -55,18 +55,14 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    if (!checked.length || !radio.length) {
-      getAllProducts();
-    }
+    if (!checked.length || !radio.length) getAllProducts();
   }, [checked.length, radio.length]);
 
   useEffect(() => {
-    if (checked.length || radio.length) {
-      filterProducts();
-    }
+    if (checked.length || radio.length) filterProduct();
   }, [checked, radio]);
 
-  const filterProducts = async () => {
+  const filterProduct = async () => {
     try {
       const { data } = await axios.post(
         `${process.env.REACT_APP_API}/api/v1/product/products-filters`,
@@ -78,7 +74,6 @@ const HomePage = () => {
       setProducts(data?.products);
     } catch (error) {
       console.log(error);
-      toast.error("Error in getting filtered products");
     }
   };
 
@@ -99,8 +94,7 @@ const HomePage = () => {
             {categories?.map((c) => (
               <Checkbox
                 key={c._id}
-                className="pb-2 ps-4"
-                onChange={(e) => handleFilters(e.target.checked, c._id)}
+                onChange={(e) => handleFilter(e.target.checked, c._id)}
               >
                 {c.name}
               </Checkbox>
@@ -118,7 +112,12 @@ const HomePage = () => {
             </Radio.Group>
           </div>
           <div className="d-flex flex-column">
-            <button className="btn btn-danger mt-4">Reset Filter</button>
+            <button
+              className="btn btn-danger mt-4"
+              onClick={() => window.location.reload()}
+            >
+              Reset Filter
+            </button>
           </div>
         </div>
         <div className="col-md-9">
