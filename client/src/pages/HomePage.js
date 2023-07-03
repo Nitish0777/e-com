@@ -10,8 +10,11 @@ const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [checked, setChecked] = useState([]);
   const [radio, setRadio] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  const getCategories = async () => {
+  const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
         `${process.env.REACT_APP_API}/api/v1/category/get-category`
@@ -27,19 +30,55 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    getCategories();
+    getAllCategory();
+    getTotal();
   }, []);
 
   //get all products
   const getAllProducts = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/get-products`
+        `${process.env.REACT_APP_API}/api/v1/product/products-list/${page}`
       );
+      setLoading(false);
       setProducts(data.products);
     } catch (error) {
+      setLoading(false);
       console.log(error);
       toast.error("Error in getting all products");
+    }
+  };
+
+  //get total count
+  const getTotal = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/products-count`
+      );
+      setTotal(data?.total);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //load more
+  useEffect(() => {
+    if (page === 1) return;
+    loadMore();
+  }, [page]);
+
+  const loadMore = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/products-list/${page}`
+      );
+      setLoading(false);
+      setProducts([...products, ...data?.products]);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
   };
 
@@ -121,29 +160,39 @@ const HomePage = () => {
           </div>
         </div>
         <div className="col-md-9">
-          {JSON.stringify(radio, null, 4)}
           <h1 className="text-center">All Products</h1>
           <div className="d-flex flex-wrap">
-            {products.map((product) => (
+            {products?.map((p) => (
               <div className="card m-2" style={{ width: "18rem" }}>
                 <img
-                  src={`${process.env.REACT_APP_API}/api/v1/product/products-photo/${product._id}`}
+                  src={`${process.env.REACT_APP_API}/api/v1/product/products-photo/${p._id}`}
                   className="card-img-top"
-                  alt={product.name}
+                  alt={p.name}
                 />
                 <div className="card-body">
-                  <h5 className="card-title">{product.name}</h5>
+                  <h5 className="card-title">{p.name}</h5>
                   <p className="card-text">
-                    {product.description.substring(0, 30)}
+                    {p.description.substring(0, 30)}...
                   </p>
-                  <p className="card-text">Price: ${product.price}</p>
-                  <button className="btn btn-primary ms-1">Add to Cart</button>
-                  <button className="btn btn-secondary ms-1">
-                    View Product
-                  </button>
+                  <p className="card-text"> $ {p.price}</p>
+                  <button class="btn btn-primary ms-1">More Details</button>
+                  <button class="btn btn-secondary ms-1">ADD TO CART</button>
                 </div>
               </div>
             ))}
+          </div>
+          <div className="m-2 p-3">
+            {products && products.length < total && (
+              <button
+                className="btn btn-warning"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage(page + 1);
+                }}
+              >
+                {loading ? "Loading ..." : "Loadmore"}
+              </button>
+            )}
           </div>
         </div>
       </div>
