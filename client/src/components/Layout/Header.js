@@ -5,6 +5,7 @@ import logo from "../../assets/img/logo.png";
 import "../../styles/header.css";
 import { useAuth } from "../../context/auth";
 import { toast } from "react-hot-toast";
+import Searchinput from "../Form/Searchinput";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
@@ -25,12 +26,7 @@ const Header = () => {
             <img src={logo} alt="Logo" className="logo" />
           </Link>
         </div>
-        <div className="search-bar">
-          <input type="text" placeholder="Search" />
-          <button type="submit">
-            <FaSearch />
-          </button>
-        </div>
+        <Searchinput />
         <ul className="nav-list">
           {!auth.user ? (
             <>

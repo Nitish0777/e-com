@@ -250,3 +250,23 @@ export const productListController = async (req, res) => {
     });
   }
 };
+
+export const searchProductsController = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+    const result = await productModel
+      .find({
+        $or: [{ name: { $regex: keyword, $options: "i" } }],
+        $or: [{ description: { $regex: keyword, $options: "i" } }],
+      })
+      .select("-photo");
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+    req.success(400).send({
+      success: false,
+      message: "Error In Search Product Api",
+      error,
+    });
+  }
+};
