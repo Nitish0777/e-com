@@ -1,14 +1,16 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import { FaShoppingCart, FaSearch } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 import logo from "../../assets/img/logo.png";
 import "../../styles/header.css";
 import { useAuth } from "../../context/auth";
 import { toast } from "react-hot-toast";
 import Searchinput from "../Form/Searchinput";
+import useCategory from "../../hooks/useCategory";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
+  const categories = useCategory();
   const handleLogout = () => {
     setAuth({
       ...auth,
@@ -84,15 +86,30 @@ const Header = () => {
             </NavLink>
           </li>
 
-          <li className="nav-item">
-            <NavLink
-              to="/category"
-              className="nav-link"
-              activeclassname="active"
+          <li className="nav-item dropdown">
+            <Link
+              to="/categories"
+              className="nav-link dropdown-toggle"
+              data-bs-toggle="dropdown"
             >
-              <span className="bold-text">Category</span>
-            </NavLink>
+              Category
+            </Link>
+            <ul className="dropdown-menu">
+              <li>
+                <Link className="dropdown-item" to="/categories">
+                  All Categories
+                </Link>
+              </li>
+              {categories?.map((c) => (
+                <li key={c.id}>
+                  <Link className="dropdown-item" to={`/category/${c.slug}`}>
+                    {c.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </li>
+
           <li className="nav-item">
             <NavLink to="/cart" className="nav-link" activeclassname="active">
               <FaShoppingCart className="icons" />
