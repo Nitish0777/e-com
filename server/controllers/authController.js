@@ -140,3 +140,42 @@ export const testConteller = (req, res) => {
   console.log("Test controller");
   res.send("Test controller");
 };
+
+//Update Profile Controller ---- PUT  --- http://localhost:8080/api/v1/auth/profile
+export const updateProfileController = async (req, res) => {
+  try {
+    const { name, email, password, address, phone } = req.body;
+
+    const user = await userModel.findById(req.user._id);
+
+    if (password && password.length < 6) {
+      return res.json({
+        error: "Password should be min 6 characters long",
+      });
+    }
+    const hashedPassword = password ? await hashPassword(password) : undefined;
+    const updateUser = await userModel.findByIdAndUpdate(
+      req.user._id,
+      {
+        name: name || user.name,
+        password: hashedPassword || user.password,
+        phone: phone || user.phone,
+        address: address || user.address,
+      },
+      { new: true }
+    );
+
+    res.status(200).send({
+      success: true,
+      message: "User profile updated successfully",
+      updateUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Something went wrong in update profile",
+      error,
+    });
+  }
+};

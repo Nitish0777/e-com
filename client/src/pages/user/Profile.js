@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const Profile = () => {
   //context
-  const [auth] = useAuth();
+  const [auth, setAuth] = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,8 +29,8 @@ const Profile = () => {
     e.preventDefault();
     // Handle registration logic
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API}/api/v1/auth/register`,
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_API}/api/v1/auth/profile`,
         {
           name,
           email,
@@ -39,6 +39,16 @@ const Profile = () => {
           address,
         }
       );
+      if (data?.error) {
+        toast.error(data.error);
+      } else {
+        setAuth({ ...auth, user: data?.updateUser });
+        let ls = localStorage.getItem("auth");
+        ls = JSON.parse(ls);
+        ls.user = data?.updateUser;
+        localStorage.setItem("auth", JSON.stringify(ls));
+        toast.success("Profile updated successfully");
+      }
     } catch (error) {
       console.log("Register error", error);
       toast.error("Register error");
@@ -75,6 +85,7 @@ const Profile = () => {
                   className="form-control"
                   placeholder="Enter email"
                   value={email}
+                  disabled
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
