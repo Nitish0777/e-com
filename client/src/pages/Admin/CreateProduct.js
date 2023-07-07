@@ -25,14 +25,11 @@ const CreateProduct = () => {
         `${process.env.REACT_APP_API}/api/v1/category/get-category`
       );
       if (data?.success) {
-        setCategories(data?.categories);
-        toast.success("Product get successfully");
-      } else {
-        toast.error("Error in creating product");
+        setCategories(data?.category);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error loading categories");
+      toast.error("Something wwent wrong in getting catgeory");
     }
   };
   useEffect(() => {

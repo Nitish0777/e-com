@@ -122,7 +122,7 @@ const CreateCategory = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {categories.map((c) => (
+                  {categories?.map((c) => (
                     <>
                       <tr>
                         <td key={c._id}>{c.name}</td>
