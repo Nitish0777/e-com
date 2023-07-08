@@ -2,6 +2,7 @@ import productModel from "../models/productModel.js";
 import cateryModel from "../models/categoryModel.js";
 import fs from "fs";
 import slugify from "slugify";
+import PaytmChecksum from "../config/PaytmChecksum.js";
 
 export const createProductController = async (req, res) => {
   try {
@@ -308,6 +309,47 @@ export const productCategoryController = async (req, res) => {
     res.status(400).send({
       success: false,
       message: "Error in getting product category",
+      error,
+    });
+  }
+};
+
+export const paymentGatwayController = async (req, res) => {
+  try {
+    var params = {};
+
+    /* initialize an array */
+    (params["MID"] = process.env.PAYTM_MID),
+      (params["WEBSITE"] = process.env.PAYTM_WEBSITE),
+      (params["CHANNEL_ID"] = process.env.PAYTM_CHANNEL_ID),
+      (params["INDUSTRY_TYPE_ID"] = process.env.PAYTM_INDUSTRY_TYPE_ID),
+      (params["ORDER_ID"] = uuidv4()),
+      (params["CUST_ID"] = process.env.PAYTM_CUST_ID),
+      (params["TXN_AMOUNT"] = totalAmount),
+      (params["CALLBACK_URL"] = "http://localhost:5000/api/callback"),
+      (params["EMAIL"] = email),
+      (params["MOBILE_NO"] = "9876543210");
+
+    /**
+     * Generate checksum by parameters we have
+     * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys
+     */
+    var paytmChecksum = PaytmChecksum.generateSignature(
+      paytmParams,
+      "YOUR_MERCHANT_KEY"
+    );
+    paytmChecksum
+      .then(function (checksum) {
+        console.log("generateSignature Returns: " + checksum);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error in payment gatway",
       error,
     });
   }

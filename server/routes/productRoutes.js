@@ -5,6 +5,7 @@ import {
   deleteProductController,
   getProductsController,
   getSingleProductController,
+  paymentGatwayController,
   productCategoryController,
   productCountController,
   productFiltersController,
@@ -65,5 +66,7 @@ router.get("/related-products/:pid/:cid", relatedProductsController);
 
 // category wise products
 router.get("/product-category/:slug", productCategoryController);
+
+router.post("/payment", paymentGatwayController);
 
 export default router;
