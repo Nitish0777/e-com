@@ -3,9 +3,11 @@ import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import {
   createProductController,
   deleteProductController,
+  getCartItemsController,
   getProductsController,
   getSingleProductController,
   paymentGatwayController,
+  productCartController,
   productCategoryController,
   productCountController,
   productFiltersController,
@@ -66,6 +68,12 @@ router.get("/related-products/:pid/:cid", relatedProductsController);
 
 // category wise products
 router.get("/product-category/:slug", productCategoryController);
+
+//cart
+router.post("/product-cart", productCartController);
+
+//get cart
+router.get("/get-cart", requireSignIn, getCartItemsController);
 
 router.post("/payment", paymentGatwayController);
 

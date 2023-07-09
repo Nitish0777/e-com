@@ -3,6 +3,9 @@ import cateryModel from "../models/categoryModel.js";
 import fs from "fs";
 import slugify from "slugify";
 import PaytmChecksum from "../config/PaytmChecksum.js";
+import orderModel from "../models/orderModel.js";
+import cartModel from "../models/cartModel.js";
+import userModel from "../models/userModel.js";
 
 export const createProductController = async (req, res) => {
   try {
@@ -314,33 +317,97 @@ export const productCategoryController = async (req, res) => {
   }
 };
 
+export const productCartController = async (req, res) => {
+  try {
+    const { cart } = req.body;
+    const userId = "64aa97b9a4e9598bb0e91c06";
+    const cartData = await cartModel.create({ products: cart, user: userId });
+    await userModel.findByIdAndUpdate(userId, {
+      cart: cartData._id,
+    });
+    res.status(200).send({
+      success: true,
+      message: "Product added to cart successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error in product to cart",
+      error,
+    });
+  }
+};
+
+export const getCartItemsController = async (req, res) => {
+  try {
+    const userId = "64aa97b9a4e9598bb0e91c06";
+    const user = await userModel.findById(userId);
+    const cartId = user.cart;
+    const cart = await cartModel.findById(cartId);
+    console.log(cart);
+
+    res.status(200).send({
+      success: true,
+      cart,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error in getting cart items",
+      error,
+    });
+  }
+};
+
 export const paymentGatwayController = async (req, res) => {
   try {
+    const { cart, email, phone } = req.body;
+    console.log(req.body);
+    let total = 0;
+    cart.map((i) => {
+      total += i.price;
+    });
+
+    const totalAmount = JSON.stringify(total);
+
     var params = {};
 
     /* initialize an array */
     (params["MID"] = process.env.PAYTM_MID),
       (params["WEBSITE"] = process.env.PAYTM_WEBSITE),
-      (params["CHANNEL_ID"] = process.env.PAYTM_CHANNEL_ID),
-      (params["INDUSTRY_TYPE_ID"] = process.env.PAYTM_INDUSTRY_TYPE_ID),
-      (params["ORDER_ID"] = uuidv4()),
-      (params["CUST_ID"] = process.env.PAYTM_CUST_ID),
+      (params["CHANNEL_ID"] = "WEB"),
+      (params["INDUSTRY_TYPE_ID"] = "Retail"),
+      (params["ORDER_ID"] = "ORD" + new Date().getTime()),
+      (params["CUST_ID"] = "CUST" + new Date().getTime()),
       (params["TXN_AMOUNT"] = totalAmount),
-      (params["CALLBACK_URL"] = "http://localhost:5000/api/callback"),
+      (params["CALLBACK_URL"] =
+        "http://localhost:8080/api/v1/product/callback"),
       (params["EMAIL"] = email),
-      (params["MOBILE_NO"] = "9876543210");
+      (params["MOBILE_NO"] = phone);
 
     /**
      * Generate checksum by parameters we have
      * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys
      */
+
     var paytmChecksum = PaytmChecksum.generateSignature(
-      paytmParams,
-      "YOUR_MERCHANT_KEY"
+      console.log("1*******************************************", params),
+      params,
+      process.env.MERCHANT_KEY
     );
     paytmChecksum
       .then(function (checksum) {
         console.log("generateSignature Returns: " + checksum);
+        console.log("*******************************************", params);
+        let paytmParams = {
+          ...params,
+          // ----------string  "CHECKSUMHASH": checksum,
+          CHECKSUMHASH: checksum,
+        };
+
+        res.json(paytmParams);
       })
       .catch(function (error) {
         console.log(error);

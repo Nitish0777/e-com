@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema(
     payment: {},
     buyer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Users",
     },
     status: {
       type: String,
@@ -31,4 +31,4 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Order", categorySchema);
+export default mongoose.model("Order", orderSchema);

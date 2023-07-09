@@ -3,6 +3,7 @@ import Layout from "../components/Layout/Layout";
 import { useCart } from "../context/cart";
 import { useAuth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
@@ -16,10 +17,46 @@ const CartPage = () => {
       cart?.map((p) => {
         total += p.price;
       });
-      return total.toLocaleString("en-US", {
+      return total.toLocaleString("en-IN", {
         style: "currency",
-        currency: "USD",
+        currency: "INR",
       });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getData = async (data) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/api/v1/product/payment`,
+        data,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const makePayment = async (email, phone) => {
+    try {
+      console.log("make payment");
+      const response = await getData({ cart, email, phone });
+
+      // const information = {
+      //   action: "https://securegw-stage.paytm.in/order/process",
+      //   params: response,
+      // };
+
+      // post(information);
+      console.log(response);
+      // res.json(response);
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +113,7 @@ const CartPage = () => {
                   </p>
                   <p className="card-text">Price:- $ {p.price}</p>
                   <button
-                    class="btn btn-danger"
+                    className="btn btn-danger"
                     onClick={() => removeCartItem(p._id)}
                   >
                     Remove
@@ -100,6 +137,14 @@ const CartPage = () => {
                     onClick={() => navigate("/dashboard/user/profile")}
                   >
                     Change Address
+                  </button>
+                  <button
+                    className="btn btn-outline-primary ml-2"
+                    onClick={() =>
+                      makePayment(auth?.user?.email, auth?.user?.phone)
+                    }
+                  >
+                    Payment
                   </button>
                 </div>
               </>

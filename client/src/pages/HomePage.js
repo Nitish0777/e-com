@@ -189,9 +189,15 @@ const HomePage = () => {
                     class="btn btn-secondary ms-1"
                     onClick={() => {
                       setCart([...cart, p]);
-                      localStorage.setItem(
-                        "cart",
-                        JSON.stringify([...cart, p])
+                      // localStorage.setItem(
+                      //   "cart",
+                      //   JSON.stringify([...cart, p])
+                      // );
+                      axios.post(
+                        `${process.env.REACT_APP_API}/api/v1/product/product-cart`,
+                        {
+                          cart: [...cart, p],
+                        }
                       );
                       toast.success("Product added to cart");
                     }}
