@@ -319,10 +319,11 @@ export const productCategoryController = async (req, res) => {
 
 export const productCartController = async (req, res) => {
   try {
-    const { cart } = req.body;
-    const userId = "64aa97b9a4e9598bb0e91c06";
-    const cartData = await cartModel.create({ products: cart, user: userId });
-    await userModel.findByIdAndUpdate(userId, {
+    const { cart, id } = req.body;
+
+    console.log("id**", req.body);
+    const cartData = await cartModel.create({ products: cart, user: id });
+    await userModel.findByIdAndUpdate(id, {
       cart: cartData._id,
     });
     res.status(200).send({
@@ -341,15 +342,25 @@ export const productCartController = async (req, res) => {
 
 export const getCartItemsController = async (req, res) => {
   try {
-    const userId = "64aa97b9a4e9598bb0e91c06";
+    const userId = req.body.id;
+    console.log("user from frontend", userId);
     const user = await userModel.findById(userId);
     const cartId = user.cart;
     const cart = await cartModel.findById(cartId);
-    console.log(cart);
+    console.log("cart**", cart);
+    const products = cart.products;
+    console.log("products**", products);
+
+    const cartProduct = [];
+    for (let i = 0; i < products.length; i++) {
+      const product = await productModel.findById(products[i]);
+      console.log("***********", product);
+      cartProduct.push(product);
+    }
 
     res.status(200).send({
       success: true,
-      cart,
+      cartProduct,
     });
   } catch (error) {
     console.log(error);

@@ -73,7 +73,7 @@ router.get("/product-category/:slug", productCategoryController);
 router.post("/product-cart", productCartController);
 
 //get cart
-router.get("/get-cart", requireSignIn, getCartItemsController);
+router.post("/get-cart", requireSignIn, getCartItemsController);
 
 router.post("/payment", paymentGatwayController);
 
