@@ -6,8 +6,10 @@ import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cart";
+import { useAuth } from "../context/auth";
 
 const HomePage = () => {
+  const [auth] = useAuth();
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -197,6 +199,7 @@ const HomePage = () => {
                         `${process.env.REACT_APP_API}/api/v1/product/product-cart`,
                         {
                           cart: [...cart, p],
+                          id: auth?.user?._id,
                         }
                       );
                       toast.success("Product added to cart");

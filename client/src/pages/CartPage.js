@@ -1,14 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout/Layout";
 import { useCart } from "../context/cart";
 import { useAuth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
   const [cart, setCart] = useCart();
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+
+  //get all products
+  const getCartProducts = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API}/api/v1/product/get-cart`,
+        {
+          id: auth?.user?._id,
+        }
+      );
+      console.log("DATAAAAAAAAA", data);
+      setCart(data.cartProduct);
+      // setProducts(data.cartProduct);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error in getting all cart product");
+    }
+  };
+
+  useEffect(() => {
+    getCartProducts();
+  }, []);
 
   //total price
   const totalPrice = () => {
