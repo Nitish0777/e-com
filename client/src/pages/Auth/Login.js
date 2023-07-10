@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../../styles/login.css";
 import Layout from "../../components/Layout/Layout";
@@ -14,6 +14,16 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    // Check if authentication token exists in local storage
+    const storedAuth = localStorage.getItem("auth");
+    if (storedAuth) {
+      const parsedAuth = JSON.parse(storedAuth);
+      setAuth(parsedAuth);
+      navigate(location.state || "/");
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle login logic
@@ -26,12 +36,10 @@ const Login = () => {
         }
       );
       if (res.data.success) {
-        toast.success("Register successfull");
-        setAuth({
-          user: res.data.user,
-          token: res.data.token,
-        });
-        localStorage.setItem("auth", JSON.stringify(res.data));
+        toast.success("Login successfull");
+        const { user, token } = res.data;
+        setAuth({ user, token });
+        localStorage.setItem("auth", JSON.stringify({ user, token }));
         navigate(location.state || "/");
       } else {
         toast.error(res.data.message);

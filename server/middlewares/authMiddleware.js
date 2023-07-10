@@ -5,6 +5,7 @@ import userModel from "../models/userModel.js";
 export const requireSignIn = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
+    console.log("token fron BE", token);
     if (!token) {
       return res.status(400).send({
         success: false,

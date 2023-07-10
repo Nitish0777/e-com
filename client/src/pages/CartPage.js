@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 
 const CartPage = () => {
-  const [auth, setAuth] = useAuth();
+  const [auth] = useAuth();
   const [cart, setCart] = useCart();
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
@@ -15,14 +15,22 @@ const CartPage = () => {
   //get all products
   const getCartProducts = async () => {
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API}/api/v1/product/get-cart`,
-        {
-          id: auth?.user?._id,
-        }
-      );
-      console.log("DATAAAAAAAAA", data);
-      setCart(data.cartProduct);
+      console.log("aaa", auth);
+      if (auth?.token) {
+        axios.defaults.headers.common["Authorization"] = auth?.token;
+        const { data } = await axios.post(
+          `${process.env.REACT_APP_API}/api/v1/product/get-cart`,
+          {
+            id: auth?.user?._id,
+          }
+        );
+        console.log("DATAAAAAAAAA", data);
+        setCart(data.cartProduct);
+        setProducts(data.cartProduct);
+      } else {
+        console.log("no token provided");
+      }
+
       // setProducts(data.cartProduct);
     } catch (error) {
       console.log(error);
@@ -32,7 +40,7 @@ const CartPage = () => {
 
   useEffect(() => {
     getCartProducts();
-  }, []);
+  }, [auth?.token]);
 
   //total price
   const totalPrice = () => {
@@ -148,7 +156,7 @@ const CartPage = () => {
           </div>
           <div className="col-md-4 text-center">
             <h4>Cart Summary</h4>
-            <p>Toatal | checkout | payment</p>
+            <p>Total | checkout | payment</p>
             <hr />
             <h4>Total: {totalPrice()}</h4>
             {auth?.user?.address ? (
@@ -195,7 +203,6 @@ const CartPage = () => {
                 )}
               </div>
             )}
-            ;
           </div>
         </div>
       </div>

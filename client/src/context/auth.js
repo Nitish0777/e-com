@@ -8,20 +8,26 @@ const AuthProvider = ({ children }) => {
     token: "",
   });
 
-  //default axios header
-  axios.defaults.headers.common["Authorization"] = auth?.token;
-
   useEffect(() => {
     const data = localStorage.getItem("auth");
+    // console.log(data);
     if (data) {
       const parsedData = JSON.parse(data);
-      setAuth({
-        ...auth,
-        user: parsedData.user,
-        token: parsedData.token,
-      });
+      console.log(parsedData);
+      console.log("token", parsedData.token);
+      setAuth(
+        {
+          // ...auth,
+          user: parsedData.user,
+          token: parsedData.token,
+        },
+        () => {
+          axios.defaults.headers.common["Authorization"] = parsedData.token;
+        }
+      );
     }
   }, []);
+
   return (
     <AuthContext.Provider value={[auth, setAuth]}>
       {children}
