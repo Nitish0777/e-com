@@ -59,11 +59,12 @@ body {
 }
 
 .search-bar button[type="submit"] {
-  padding: 6px 10px;
+  padding: 5.2px 9px;
   background-color: #fff; /* White color */
   color: #2874f0; /* Blue color */
   border: none;
   cursor: pointer;
+  border-radius: 0;
 }
 
 .nav-list {

@@ -40,7 +40,7 @@ const CartPage = () => {
 
   useEffect(() => {
     getCartProducts();
-  }, [auth?.token]);
+  }, []);
 
   //total price
   const totalPrice = () => {

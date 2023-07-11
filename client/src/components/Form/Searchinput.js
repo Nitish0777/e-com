@@ -2,6 +2,7 @@ import React from "react";
 import { useSearch } from "../../context/search";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import "../../styles/searchInput.css";
 import axios from "axios";
 
 const Searchinput = () => {
