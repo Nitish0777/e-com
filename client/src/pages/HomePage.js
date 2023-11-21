@@ -7,6 +7,7 @@ import { Prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cart";
 import { useAuth } from "../context/auth";
+import ChatBot from "../components/chatBot/ChatBot";
 
 const HomePage = () => {
   const [auth] = useAuth();
@@ -224,6 +225,16 @@ const HomePage = () => {
               </button>
             )}
           </div>
+        </div>
+        <div
+          style={{
+            width: "40%",
+            position: "absolute",
+            marginLeft: "77%",
+            marginTop: "17%",
+          }}
+        >
+          <ChatBot />
         </div>
       </div>
     </Layout>
