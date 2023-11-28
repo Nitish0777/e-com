@@ -229,7 +229,7 @@ const HomePage = () => {
         <div
           style={{
             width: "40%",
-            position: "absolute",
+            position: "fixed",
             marginLeft: "77%",
             marginTop: "17%",
           }}
