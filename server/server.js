@@ -7,7 +7,7 @@ import authRoutes from "./routes/authRoute.js";
 import cors from "cors";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
-import PaytmChecksum from "./config/PaytmChecksum.js";
+import stripe from "./routes/stripe.js";
 
 //configuring dotenv
 dotenv.config();
@@ -21,11 +21,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+// for stripe
+app.use(express.static("public"));
 
 //routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/product", productRoutes);
+app.use("/api/stripe", stripe);
 
 app.get("/", (req, res) => {
   res.send("<h2>Server is ready</h2>");
