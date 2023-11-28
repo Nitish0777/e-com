@@ -5,6 +5,7 @@ import { useAuth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import PayButton from "../PayButton";
 
 const CartPage = () => {
   const [auth] = useAuth();
@@ -170,13 +171,8 @@ const CartPage = () => {
                   >
                     Change Address
                   </button>
-                  <button
-                    className="btn btn-outline-primary ml-2"
-                    onClick={() =>
-                      makePayment(auth?.user?.email, auth?.user?.phone)
-                    }
-                  >
-                    Payment
+                  <button className="btn btn-outline-primary ml-2">
+                    <PayButton cartItems={cart} />
                   </button>
                 </div>
               </>
