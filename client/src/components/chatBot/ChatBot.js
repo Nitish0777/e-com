@@ -7,7 +7,7 @@ function ChatBot() {
       width="350"
       height="430"
       allow="microphone;"
-      src="https://console.dialogflow.com/api-client/demo/embedded/26e44813-1fb1-492f-a8b8-6f745839704e"
+      src="https://console.dialogflow.com/api-client/demo/embedded/a6bce2c0-57d6-4ac1-836e-197dfa3b12a7"
       title="Chat Bot"
     ></iframe>
   );

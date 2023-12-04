@@ -9,6 +9,7 @@ const PrivateRoute = () => {
   const [auth, setAuth] = useAuth();
   useEffect(() => {
     const authCheck = async () => {
+      axios.defaults.headers.common["Authorization"] = auth?.token;
       const res = await axios.get(
         `${process.env.REACT_APP_API}/api/v1/auth/user-auth`
       );

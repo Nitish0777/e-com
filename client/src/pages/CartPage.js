@@ -51,45 +51,8 @@ const CartPage = () => {
         total += p.price;
       });
       return total.toLocaleString("en-IN", {
-        style: "currency",
         currency: "INR",
       });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getData = async (data) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}/api/v1/product/payment`,
-        data,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const makePayment = async (email, phone) => {
-    try {
-      console.log("make payment");
-      const response = await getData({ cart, email, phone });
-
-      // const information = {
-      //   action: "https://securegw-stage.paytm.in/order/process",
-      //   params: response,
-      // };
-
-      // post(information);
-      console.log(response);
-      // res.json(response);
     } catch (error) {
       console.log(error);
     }
@@ -159,7 +122,7 @@ const CartPage = () => {
             <h4>Cart Summary</h4>
             <p>Total | checkout | payment</p>
             <hr />
-            <h4>Total: {totalPrice()}</h4>
+            <h4>Total: ₹{totalPrice()}</h4>
             {auth?.user?.address ? (
               <>
                 <div className="mb-3">
@@ -172,7 +135,7 @@ const CartPage = () => {
                     Change Address
                   </button>
                   <button className="btn btn-outline-primary ml-2">
-                    <PayButton cartItems={cart} />
+                    <PayButton cartItems={{ cart }} totalPrice={totalPrice()} />
                   </button>
                 </div>
               </>

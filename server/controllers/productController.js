@@ -348,7 +348,7 @@ export const getCartItemsController = async (req, res) => {
     const cartId = user.cart;
     const cart = await cartModel.findById(cartId);
     console.log("cart**", cart);
-    const products = cart.products;
+    const products = cart?.products;
     console.log("products**", products);
 
     const cartProduct = [];

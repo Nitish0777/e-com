@@ -1,8 +1,26 @@
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "./context/auth";
 
-const PayButton = ({ cartItems }) => {
+const PayButton = ({ cartItems, totalPrice }) => {
+  console.log("cartItems", cartItems);
+  const [auth, setAuth] = useAuth();
   const handleCheckout = async () => {
-    console.log("cartItems", cartItems);
+    console.log("Cart", cartItems);
+    const res = axios
+      .post(`${process.env.REACT_APP_API}/api/stripe/create-checkout-session`, {
+        cartItems,
+        totalPrice,
+        user: auth.user,
+      })
+      .then((res) => {
+        console.log("res", res);
+        console.log("res.data", res.data.URL);
+        window.location.href = res.data.URL;
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
   return (
     <div>
@@ -10,35 +28,5 @@ const PayButton = ({ cartItems }) => {
     </div>
   );
 };
-
-// const PayButton = ({ amount, description, user }) => {
-//   const [stripe, setStripe] = useState(null);
-
-//   useEffect(() => {
-//     setStripe(window.Stripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY));
-//   }, []);
-
-//   const handleClick = async (event) => {
-//     const { data } = await axios.post("/api/stripe/create-checkout-session", {
-//       amount,
-//       description,
-//       user,
-//     });
-
-//     await stripe.redirectToCheckout({
-//       sessionId: data.id,
-//     });
-//   };
-
-//   return (
-//     <button
-//       className="btn btn-primary btn-block"
-//       onClick={handleClick}
-//       disabled={!stripe}
-//     >
-//       Pay
-//     </button>
-//   );
-// };
 
 export default PayButton;
