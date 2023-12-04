@@ -4,7 +4,6 @@ import Stripe from "stripe";
 const KEY =
   "sk_test_51OHRWBSBiNhl5WCsUuUuhD8tG0ryrkJTEIBvwV5k16G2oiybLecFeGDJJZYZ1eTPac5QypeEvSNHD2TpD9q18miO00cKcyJAwE";
 console.log("STRIPE KEY", KEY);
-const CLIENT_URL = "http://localhost:3000";
 
 const stripe = new Stripe(`${KEY}`, {
   apiVersion: "2020-08-27",
@@ -13,7 +12,7 @@ const stripe = new Stripe(`${KEY}`, {
 const router = express.Router();
 
 router.post("/create-checkout-session", async (req, res) => {
-  console.log("req.body", req.body);
+  console.log("req.body", req.body.cartItems);
   const priceInPaise = Math.floor(parseFloat(req.body.totalPrice) * 100);
   console.log("priceInPaise", priceInPaise);
   const session = await stripe.checkout.sessions.create({
